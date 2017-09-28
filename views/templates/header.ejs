@@ -1,0 +1,29 @@
+<div class="header container-fluid marginbottom10">
+		<div class="row align-items-center">
+			<div class="col-sm-8">
+				<p>
+					Вы вошли как
+					<% if(!!locals.i){ -%>
+							<a class="badge badge-success" href="/profile/<%=locals.i.id%>"><%- locals.i.email%>, <%- locals.i.name %></a><a class="badge badge-danger" href="/api/logout"><i class="fa fa-times"></i></a>
+						<%} else { -%>	
+						 Гость, вы можете <a class="badge badge-success" href="../auth">войти</a> или <a class="badge badge-success" href="../register">зарегистрироваться</a>
+					<%} -%>
+				</p>
+			</div>
+			<div class="col-sm-4">
+				<form action="/search/" method="GET">
+					<div class="form-group">
+						<div class="input-group">
+							<input class="form-control" type="text" placeholder="Поиск" name="q" <%- (!!locals.q)? 'value="'+q+'"': '' %>>
+							<div class="input-group-btn">
+								<button class="btn btn-light cstm-border" type="submit">
+									<i class="fa fa-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+

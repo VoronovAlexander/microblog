@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Редактирование профиля</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<%- include templates/header.ejs %>
+
+	<div class="container col-sm-4">
+		<div class="row">
+			<form class="form-inline"class="" action="edit_profile" method="POST">
+				<div class="form-group">
+					<label for="name">Ваше новое имя: </label>
+					<div class="input-group">
+						<input class="form-control" type="text" name="name" value="<%- i.name -%>">
+						<div class="input-group-btn">
+							<button type="button" id="enter" class="form-control btn btn-success height100percents" type="submit">
+								<i class="fa fa-floppy-o"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div id="message" class="text-success row"> </div>
+			</form>
+		</div>
+		<div class="row">
+			<p>Хотите обновить аватарку? Сделайте это на <a class="alert-link" target="blank" href="https://ru.gravatar.com/emails/">Gravatar.com</a></p>
+		</div>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$("#enter").click(function(e){
+			$("#message").removeClass("text-success");
+			$("#message").removeClass("text-danger");
+			$("#message").html('...');
+
+			var name = $("input[name=\"name\"]").val();
+			$.post("/api/edit_profile",{name: name},function(data){
+				switch(data.message){
+					case '0': 
+						$("#message").addClass("text-success");
+						$("#message").html('Ваш профиль обновлен.');
+					break;
+					case '1':
+						$("#message").addClass("text-danger");
+						$("#message").html('Новое имя не может быть пустым');
+					break;		
+					case '2':
+						$("#message").addClass("text-danger");
+						$("#message").html('Что-то пошло не так, попробуйте позже');
+					break;									
+				}
+			},"json");
+		});
+	</script>	
+</body>
+</html>

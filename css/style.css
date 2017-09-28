@@ -1,0 +1,38 @@
+@font-face {
+    font-family: San Francisco;
+    src: url(../fonts/9651.ttf);
+   }
+body{
+	background-color: #f1f1f1;
+	font-family: San Francisco;
+}
+.header{
+	padding-top: 12px;
+	border-bottom:  1px solid #d3d3ff;
+}
+
+.marginbottom10{
+	margin-bottom: 10px; 
+}
+
+.marginbottom20{
+	margin-bottom: 20px;
+}
+
+.cstm-border{
+	border: 1px solid #6a807e;
+}
+.min-height38px{
+	min-height: 38px;
+}
+.height100percents{
+	height: 100%;
+}
+
+.auth, .register{
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+.authform, .registerform{
+	max-width: 360px;
+}

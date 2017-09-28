@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Поиск пользователей</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/css/style.css">
+	<style type="text/css">
+		.block-user{
+			background-color: #FFF;
+			border: 1px solid #dfdfdf;
+			border-radius: 5px;
+		}
+		.block-name{
+			border-right: 2px solid #dfdfdf;
+			padding-right: 30px;
+		}
+	</style>
+</head>
+<body>
+
+	<!-- HEADER START -->
+	<%- include templates/header.ejs %>
+	<!-- HEADER END -->
+
+
+	<!-- WRAPPER START -->
+	<div class="container col-sm-8">
+			<div class="row marginbottom10">
+				<div class="col-sm-12">
+					<div class="">
+						<h1>Результаты поиска:</h1>
+						<p>Найдено <%=(!!locals.users)? users.length : '0' %> пользователей</p>
+					</div>
+				</div>
+			</div>
+			<% if(!!locals.users){ for(var i=0;i<users.length;i++) {%>
+				<div class="row marginbottom10">
+					<div class="col-sm-12">
+						<div class="row align-items-center block-user">
+							<div class="col-sm-3">
+								<div class="row">
+									<img class="avatar " src="http://www.gravatar.com/avatar/<%= users[i].email+'?s=200' -%>" alt="avatar">
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<p class="display-4 text-right block-name"><a href="/profile/<%=users[i].id%>"><%=users[i].name%></a></p>
+							</div>
+							<div class="col-sm-3">
+								<div class="display-2"><%= users[i].count %> </div>
+								<p class="lead">публикаций</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			<%}}%>
+	</div>
+	<!-- WRAPPER END -->
+
+</body>
+</html>

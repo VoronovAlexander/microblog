@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Auth</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth">
+
+<div class="container authform">
+	<div class="d-flex justify-content-center marginbottom20">
+	  <div class="btn-group">
+	      <a class="btn btn-success active" href="auth">
+	          <i class="fa fa-sign-in" aria-hidden="true"></i> Вход
+	      </a>
+	      <a class="btn  btn-success" href="register">
+	          <i class="fa fa-address-card-o" aria-hidden="true"></i> Регистрация
+	      </a>
+	  </div>
+	</div>
+
+		<form submit="submit()">
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><i style="width: 1rem" class="fa fa-at"></i></span>
+					<input class="form-control" type="text" name="email" placeholder="Email адрес" 
+					<%= (!!locals.email)? 'value='+email+'':'' %> autofocus>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><i style="width: 1rem" class="fa fa-key"></i></span>
+					<input class="form-control" type="password" name="password" placeholder="Пароль">
+				</div>
+			</div>
+			<!-- </div> -->
+			<div class="form-group">
+				<button type="button" id="enter" class="form-control btn btn-lg btn-outline-success">Войти</button>
+			</div>
+			<div id="message" class="text-danger"></div>
+		</form>
+</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$("#enter").click(function(e){
+			var email = $("input[name=\"email\"]").val();
+			var password = $("input[name='password']").val();
+
+			$.post("/api/auth",{email: email, password: password},function(data){
+				switch(data.message){
+					case '0': 
+						// $("#message").html('Все ок');
+						window.location.href = "/profile/"+data.id;
+					break;
+					case '1':
+						$("#message").html('Неверный email или пароль');
+					break;
+					case '2':
+						$("#message").html('Произошла ошибка, попробуйте позже');
+					break;
+					case '3':
+						$("#message").html('Неверный email или пароль');
+					break;										
+				}
+			},"json");
+		});
+	</script>
+</body>
+</html>

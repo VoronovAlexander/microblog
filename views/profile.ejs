@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title><%= user.name %></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- HEADER START -->
+<%- include templates/header.ejs %>
+<!-- HEADER END -->
+
+<!-- WRAPPER START -->
+	<!-- ABOUT USER START-->
+	<div class="container">
+		<div class="row">
+			<!-- LEFT START -->
+			<%- include templates/left.ejs %>
+			<!-- LEFT END -->
+
+			<div class="col-sm-9">
+				<div class="card marginbottom10">
+					<div class="card-header">
+						<div class="row align-items-center">
+							<div class="col-sm-9">
+								<p class="h1"><%= user.name %></p>
+							</div>
+							<div class="col-sm-3">
+								<p class="text-right">Публикаций: <%= posts.length%></p>
+							</div>
+						</div>
+					</div>
+
+					<% if(!!locals.i){ if((locals.i.id)===(locals.user.id)){ %>
+						<div class="card-body">
+	 						<div class="card-title">
+	 							<h2>Добавить пост</h2>
+	 						</div>
+	 						<div class="card-text">
+	 							<form action="/api/add_post" method="POST">
+	 								<div class="form-group">
+	 									<label for="title">Заголовок</label>
+	 									<input class="form-control" id="title" name="title" type="text">
+	 									<label for="content">Содержимое</label>
+	 
+	 									<div class="input-group">
+	 										<textarea class="form-control min-height38px" name="content"></textarea>
+	 										<div class="input-group-btn">
+	 											<button class="btn btn-primary height100percents" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+	 										</div>
+	 									</div> 
+	 								</div> 
+	 							</form>
+	 						</div> 
+	 					</div> 
+					<%}}%>
+				</div> <!-- card -->
+	<!-- ABOUT USER END-->
+
+	<!-- POSTS START-->
+		<% 	if(posts.length!=0) {
+		for( var i = 0; i<posts.length; i++ ) { %>
+				<div class="card marginbottom10">
+					<div class="card-header align-items-center">
+						<div class="d-flex align-items-center justify-content-between">
+							<h2 id="post_title_<%=posts[i].id%>"><%= posts[i].title %></h2>
+
+							<% if(!!locals.i){ if((locals.i.id)===(locals.user.id)){ %>
+							<div>
+								<a id="edit_<%=posts[i].id%>" onclick="edit(<%=posts[i].id%>)">
+									<i class="fa fa-pencil"></i>
+								</a>
+								<a id="remove_<%=posts[i].id%>" href="/api/remove_post?id=<%=posts[i].id%>">
+									<i class="fa fa-times"></i>
+								</a>
+								<a id="save_<%=posts[i].id%>" onclick="save(<%=posts[i].id%>)" style="display: none; margin-left:3px;">
+									<i class="fa fa-check" aria-hidden="true"></i>
+								</a>
+								<a id="cancel_<%=posts[i].id%>" onclick="cancel(<%=posts[i].id%>)" style="display: none;">
+									<i class="fa fa-ban"></i>
+								</a>
+							</div>
+							<% }} %>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="card-text">
+							<span id="post_content_<%=posts[i].id%>"><%-posts[i].content.replaceAll('\r\n','<br>')%></span>
+						</div> <!-- card-text -->
+					</div> <!-- card-body -->
+				</div> <!-- card -->
+		<% } } else {%>
+			<div class="card marginbottom10">
+				<div class="card-header align-items-center">
+					<h2></h2>
+				</div>
+				<div class="card-body">
+					<div class="card-text">
+						<span>
+							<% if(!!locals.i){ if((locals.i.id)===(locals.user.id)){ %>
+								<p>У вас еще нет публикаций, может запостите что-то?</p>
+							<%} } else { %>
+								<p>К сожалению у пользователя <a href="<%= user.id%>"><%= user.name%></a> нет публикаций</p>
+							<% } %>
+						</span>
+					</div> <!-- card-text -->
+				</div> <!-- card-body -->
+			</div> <!-- card -->
+		<% }%> 
+
+	<!-- POSTS END-->
+
+			</div> <!-- col-sm-9 -->
+		</div> <!-- row -->
+	</div> <!-- container -->
+<!-- WRAPPER END -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+	
+	String.prototype.replaceAll = function(search, replacement) {
+    	var target = this;
+    	return target.replace(new RegExp(search, 'g'), replacement);
+	}
+
+	function edit(id){
+		 $('#post_title_'+id).replaceWith('<input id=\"post_title_'+id+'\" type=\"text\" class=\"form-control\" value="'+$('#post_title_'+id).html()+'">');
+		 $('#post_content_'+id).replaceWith('<textarea id=\"post_content_'+id+'\" class=\"form-control\">'+$('#post_content_'+id).html().replaceAll('<br>','\r\n')+'</textarea>');
+		 $('#edit_'+id).hide();
+		 $('#remove_'+id).hide();
+		 $('#save_'+id).show();
+		 $('#cancel_'+id).show();
+	}
+
+	function save(id){
+		var title = $('#post_title_'+id);
+		var content = $('#post_content_'+id);
+
+		$.post("/api/update_post",{id: id, title: title.val(), content: content.val() },function(data){
+			alert('sended');
+		},"json");
+
+		title.replaceWith('<h2 id="post_title_'+id+'">'+title.val()+'</h2>');
+		content.replaceWith('<span id="post_content_'+id+'">'+content.val().replaceAll('\r\n','<br>')+'</span>');
+		$('#cancel_'+id).hide();
+		$('#save_'+id).hide();
+		$('#remove_'+id).show();
+		$('#edit_'+id).show();
+	}
+
+	function cancel(id){
+		var title = $('#post_title_'+id);
+		var content = $('#post_content_'+id);
+
+		title.replaceWith('<h2 id="post_title_'+id+'">'+title.html()+'</h2>');
+		content.replaceWith('<span id="post_content_'+id+'">'+content.html().replaceAll('\r\n','<br>')+'</span>');
+		$('#cancel_'+id).hide();
+		$('#save_'+id).hide();
+	}
+	</script>
+
+</body>
+</html>

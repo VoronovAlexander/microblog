@@ -1,0 +1,8 @@
+			<div class="col-sm-3">
+				<div class="d-flex flex-column justify-content-center">
+					<img class="img-thumbnail" src="http://www.gravatar.com/avatar/<%- user.email -%>?s=290" alt="avatar">
+				<% if(!!locals.i){ if((locals.i.id)===(locals.user.id)){ %>
+						<a class="btn btn-primary" href="/edit_profile">Изменить профиль</a>
+				<%} } %>
+				</div>
+			</div>

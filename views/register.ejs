@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Register</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="register">
+
+<div class="container registerform">
+	<div class="d-flex justify-content-center marginbottom20">
+	  <div class="btn-group">
+	      <a class="btn btn-success" href="auth">
+	          <i class="fa fa-sign-in" aria-hidden="true"></i> Вход
+	      </a>
+	      <a class="btn btn-success active" href="register">
+	          <i class="fa fa-address-card-o" aria-hidden="true"></i> Регистрация
+	      </a>
+	  </div>
+	</div>
+
+		<form action="register" method="POST">
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><i style="width: 1rem" class="fa fa-user"></i></span>
+					<input class="form-control" type="text" name="name" placeholder="Ваше имя" autofocus>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><i style="width: 1rem" class="fa fa-at"></i></span>
+					<input class="form-control" type="email" name="email" placeholder="Email адрес">
+
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><i style="width: 1rem" class="fa fa-key"></i></span>
+					<input class="form-control" type="password" name="password" placeholder="Пароль">
+				</div>
+			</div>
+
+			<div class="form-group">
+					<button type="button" id="enter" class="form-control btn btn-lg btn-outline-success">Зарегистрироваться</button>
+			</div>
+			<div id="message" class="text-danger"></div>
+		</form>
+</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$("#enter").click(function(e){
+			$("#message").removeClass("text-success");
+			$("#message").removeClass("text-danger");
+			$("#message").html('...');
+
+			var name = $("input[name=\"name\"]").val();
+			var email = $("input[name=\"email\"]").val();
+			var password = $("input[name='password']").val();
+			$.post("/api/register",{name: name, email: email, password: password},function(data){
+				switch(data.message){
+					case '0': 
+						$("#message").addClass("text-success");
+						$("#message").html('Регистрация завершена, теперь вы можете войти.');
+					break;
+					case '1':
+						$("#message").addClass("text-danger");
+						$("#message").html('Email не может быть пустым');
+					break;
+					case '2':
+						$("#message").addClass("text-danger");
+						$("#message").html('Пароль не может быть пустым');
+					break;
+					case '3':
+						$("#message").addClass("text-danger");
+						$("#message").html('Пользователь с таким email уже существует');
+					break;										
+				}
+			},"json");
+		});
+	</script>
+</body>
+</html>
