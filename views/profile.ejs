@@ -69,22 +69,30 @@
 					<div class="card-header align-items-center">
 						<div class="d-flex align-items-center justify-content-between">
 							<h2 id="post_title_<%=posts[i].id%>"><%= posts[i].title %></h2>
-
+						
 							<% if(!!locals.i){ if((locals.i.id)===(locals.user.id)){ %>
-							<div>
-								<a id="edit_<%=posts[i].id%>" onclick="edit(<%=posts[i].id%>)">
-									<i class="fa fa-pencil"></i>
-								</a>
-								<a id="remove_<%=posts[i].id%>" href="/api/remove_post?id=<%=posts[i].id%>">
-									<i class="fa fa-times"></i>
-								</a>
-								<a id="save_<%=posts[i].id%>" onclick="save(<%=posts[i].id%>)" style="display: none; margin-left:3px;">
-									<i class="fa fa-check" aria-hidden="true"></i>
-								</a>
-								<a id="cancel_<%=posts[i].id%>" onclick="cancel(<%=posts[i].id%>)" style="display: none;">
-									<i class="fa fa-ban"></i>
-								</a>
-							</div>
+
+
+								<div class="btn-group" id="btn-group_<%=posts[i].id%>">
+									<button id="edit_<%=posts[i].id%>" onclick="edit(<%=posts[i].id%>)" class="btn btn-primary">
+										<i class="fa fa-pencil"></i>
+									</button>
+									<a id="remove_<%=posts[i].id%>" href="/api/remove_post?id=<%=posts[i].id%>" class="btn btn-primary">
+										<i class="fa fa-times"></i>
+									</a>
+								</div>
+
+
+								<div class="input-group-btn" id="input-btn-group_<%=posts[i].id%>" style="display: none;">
+									<button id="save_<%=posts[i].id%>" onclick="save(<%=posts[i].id%>)" class="btn btn-primary">
+										<i class="fa fa-check" aria-hidden="true"></i>
+									</button>
+									<button id="cancel_<%=posts[i].id%>" onclick="cancel(<%=posts[i].id%>)" class="btn btn-primary">
+										<i class="fa fa-ban"></i>
+									</button>
+								</div>
+
+
 							<% }} %>
 						</div>
 					</div>
@@ -129,12 +137,15 @@
 	}
 
 	function edit(id){
-		 $('#post_title_'+id).replaceWith('<input id=\"post_title_'+id+'\" type=\"text\" class=\"form-control\" value="'+$('#post_title_'+id).html()+'">');
-		 $('#post_content_'+id).replaceWith('<textarea id=\"post_content_'+id+'\" class=\"form-control\">'+$('#post_content_'+id).html().replaceAll('<br>','\r\n')+'</textarea>');
-		 $('#edit_'+id).hide();
-		 $('#remove_'+id).hide();
-		 $('#save_'+id).show();
-		 $('#cancel_'+id).show();
+		// $(this).parents('.btn-group').hide();
+		$('#post_title_'+id).replaceWith('<input id=\"post_title_'+id+'\" type=\"text\" class=\"form-control\" value="'+$('#post_title_'+id).html()+'">');
+		$('#post_content_'+id).replaceWith('<textarea id=\"post_content_'+id+'\" class=\"form-control\">'+$('#post_content_'+id).html().replaceAll('<br>','\r\n')+'</textarea>');
+		
+		$("#post_title_"+id).data('old', $("#post_title_"+id).val());
+		
+
+		$('#btn-group_'+id).hide();
+		$('#input-btn-group_'+id).show();
 	}
 
 	function save(id){
@@ -142,25 +153,26 @@
 		var content = $('#post_content_'+id);
 
 		$.post("/api/update_post",{id: id, title: title.val(), content: content.val() },function(data){
-			alert('sended');
+			// alert('sended');
 		},"json");
 
 		title.replaceWith('<h2 id="post_title_'+id+'">'+title.val()+'</h2>');
 		content.replaceWith('<span id="post_content_'+id+'">'+content.val().replaceAll('\r\n','<br>')+'</span>');
-		$('#cancel_'+id).hide();
-		$('#save_'+id).hide();
-		$('#remove_'+id).show();
-		$('#edit_'+id).show();
+		$('#input-btn-group_'+id).hide();
+		$('#btn-group_'+id).show();
 	}
 
 	function cancel(id){
 		var title = $('#post_title_'+id);
 		var content = $('#post_content_'+id);
-
-		title.replaceWith('<h2 id="post_title_'+id+'">'+title.html()+'</h2>');
+		console.log(title);
+		title.replaceWith('<h2 id="post_title_'+id+'">'+title.data('old')+'</h2>');
 		content.replaceWith('<span id="post_content_'+id+'">'+content.html().replaceAll('\r\n','<br>')+'</span>');
-		$('#cancel_'+id).hide();
-		$('#save_'+id).hide();
+
+		$("#post_title_"+id).data('old', $("#post_title_"+id).val());
+
+		$('#input-btn-group_'+id).hide();
+		$('#btn-group_'+id).show();
 	}
 	</script>
 
