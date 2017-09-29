@@ -147,7 +147,8 @@
 				$.post('/api/update_post',{id: container.data('post'), title: title.val(), content: content.val() }, function(data){
 					console.log(data)
 				}, 'json');
-                container.find().value() // THIS!!!
+                container.find('h2').text(title.val())
+                container.find('.card-text span').text(content.val())
                 container.find('.hidden').removeClass('hidden')
                 container.find('.input-group-btn').addClass('hidden')
 				title.remove()
