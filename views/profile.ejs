@@ -1,180 +1,171 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title><%= user.name %></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <title><%= user.name %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-
+ 
 <!-- HEADER START -->
 <%- include templates/header.ejs %>
 <!-- HEADER END -->
-
+ 
 <!-- WRAPPER START -->
-	<!-- ABOUT USER START-->
-	<div class="container">
-		<div class="row">
-			<!-- LEFT START -->
-			<%- include templates/left.ejs %>
-			<!-- LEFT END -->
-
-			<div class="col-sm-9">
-				<div class="card marginbottom10">
-					<div class="card-header">
-						<div class="row align-items-center">
-							<div class="col-sm-9">
-								<p class="h1"><%= user.name %></p>
-							</div>
-							<div class="col-sm-3">
-								<p class="text-right">Публикаций: <%= posts.length%></p>
-							</div>
-						</div>
-					</div>
-
-					<% if(!!locals.i){ if((locals.i.id)===(locals.user.id)){ %>
-						<div class="card-body">
-	 						<div class="card-title">
-	 							<h2>Добавить пост</h2>
-	 						</div>
-	 						<div class="card-text">
-	 							<form action="/api/add_post" method="POST">
-	 								<div class="form-group">
-	 									<label for="title">Заголовок</label>
-	 									<input class="form-control" id="title" name="title" type="text">
-	 									<label for="content">Содержимое</label>
-	 
-	 									<div class="input-group">
-	 										<textarea class="form-control min-height38px" name="content"></textarea>
-	 										<div class="input-group-btn">
-	 											<button class="btn btn-primary height100percents" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-	 										</div>
-	 									</div> 
-	 								</div> 
-	 							</form>
-	 						</div> 
-	 					</div> 
-					<%}}%>
-				</div> <!-- card -->
-	<!-- ABOUT USER END-->
-
-	<!-- POSTS START-->
-		<% 	if(posts.length!=0) {
-		for( var i = 0; i<posts.length; i++ ) { %>
-				<div class="card marginbottom10">
-					<div class="card-header align-items-center">
-						<div class="d-flex align-items-center justify-content-between">
-							<h2 id="post_title_<%=posts[i].id%>"><%= posts[i].title %></h2>
-						
-							<% if(!!locals.i){ if((locals.i.id)===(locals.user.id)){ %>
-
-
-								<div class="btn-group" id="btn-group_<%=posts[i].id%>">
-									<button id="edit_<%=posts[i].id%>" onclick="edit(<%=posts[i].id%>)" class="btn btn-primary">
-										<i class="fa fa-pencil"></i>
-									</button>
-									<a id="remove_<%=posts[i].id%>" href="/api/remove_post?id=<%=posts[i].id%>" class="btn btn-primary">
-										<i class="fa fa-times"></i>
-									</a>
-								</div>
-
-
-								<div class="input-group-btn" id="input-btn-group_<%=posts[i].id%>" style="display: none;">
-									<button id="save_<%=posts[i].id%>" onclick="save(<%=posts[i].id%>)" class="btn btn-primary">
-										<i class="fa fa-check" aria-hidden="true"></i>
-									</button>
-									<button id="cancel_<%=posts[i].id%>" onclick="cancel(<%=posts[i].id%>)" class="btn btn-primary">
-										<i class="fa fa-ban"></i>
-									</button>
-								</div>
-
-
-							<% }} %>
-						</div>
-					</div>
-					<div class="card-body">
-						<div class="card-text">
-							<span id="post_content_<%=posts[i].id%>"><%-posts[i].content.replaceAll('\r\n','<br>')%></span>
-						</div> <!-- card-text -->
-					</div> <!-- card-body -->
-				</div> <!-- card -->
-		<% } } else {%>
-			<div class="card marginbottom10">
-				<div class="card-header align-items-center">
-					<h2></h2>
-				</div>
-				<div class="card-body">
-					<div class="card-text">
-						<span>
-							<% if(!!locals.i){ if((locals.i.id)===(locals.user.id)){ %>
-								<p>У вас еще нет публикаций, может запостите что-то?</p>
-							<%} } else { %>
-								<p>К сожалению у пользователя <a href="<%= user.id%>"><%= user.name%></a> нет публикаций</p>
-							<% } %>
-						</span>
-					</div> <!-- card-text -->
-				</div> <!-- card-body -->
-			</div> <!-- card -->
-		<% }%> 
-
-	<!-- POSTS END-->
-
-			</div> <!-- col-sm-9 -->
-		</div> <!-- row -->
-	</div> <!-- container -->
+    <!-- ABOUT USER START-->
+    <div class="container">
+        <div class="row">
+            <!-- LEFT START -->
+            <%- include templates/left.ejs %>
+            <!-- LEFT END -->
+ 
+            <div class="col-sm-9">
+                <div class="card marginbottom10">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-sm-9">
+                                <p class="h1"><%= user.name %></p>
+                            </div>
+                            <div class="col-sm-3">
+                                <p class="text-right">Публикаций: <%= posts.length%></p>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <% if(!!locals.i){ if((locals.i.id)===(locals.user.id)){ %>
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h2>Добавить пост</h2>
+                            </div>
+                            <div class="card-text">
+                                <form action="/api/add_post" method="POST">
+                                    <div class="form-group">
+                                        <label for="title">Заголовок</label>
+                                        <input class="form-control" id="title" name="title" type="text">
+                                        <label for="content">Содержимое</label>
+     
+                                        <div class="input-group">
+                                            <textarea class="form-control min-height38px" name="content"></textarea>
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-primary height100percents" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    <%}}%>
+                </div> <!-- card -->
+    <!-- ABOUT USER END-->
+ 
+    <!-- POSTS START-->
+        <%  if(posts.length!=0) {
+        for( var i = 0; i<posts.length; i++ ) { %>
+                <div class="card marginbottom10" data-post="<%=posts[i].id%>">
+                    <div class="card-header align-items-center">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h2><%= posts[i].title %></h2>
+                            <% if(!!locals.i){ if((locals.i.id)===(locals.user.id)){ %>
+                                <div class="btn-group">
+                                    <button class="btn btn-primary edit">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <a href="/api/remove_post?id=<%=posts[i].id%>" class="btn btn-primary">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                                <div class="input-group-btn hidden">
+                                    <button class="btn btn-primary save">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btn btn-primary cancel">
+                                        <i class="fa fa-ban"></i>
+                                    </button>
+                                </div>
+                            <% }} %>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text">
+                            <span><%-posts[i].content.replaceAll('\r\n','<br>')%></span>
+                        </div> <!-- card-text -->
+                    </div> <!-- card-body -->
+                </div> <!-- card -->
+        <% } } else {%>
+            <div class="card marginbottom10">
+                <div class="card-header align-items-center">
+                    <h2></h2>
+                </div>
+                <div class="card-body">
+                    <div class="card-text">
+                        <span>
+                            <% if(!!locals.i){ if((locals.i.id)===(locals.user.id)){ %>
+                                <p>У вас еще нет публикаций, может запостите что-то?</p>
+                            <%} } else { %>
+                                <p>К сожалению у пользователя <a href="<%= user.id%>"><%= user.name%></a> нет публикаций</p>
+                            <% } %>
+                        </span>
+                    </div> <!-- card-text -->
+                </div> <!-- card-body -->
+            </div> <!-- card -->
+        <% }%>
+ 
+    <!-- POSTS END-->
+ 
+            </div> <!-- col-sm-9 -->
+        </div> <!-- row -->
+    </div> <!-- container -->
 <!-- WRAPPER END -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-	<script type="text/javascript">
-	
-	String.prototype.replaceAll = function(search, replacement) {
-    	var target = this;
-    	return target.replace(new RegExp(search, 'g'), replacement);
-	}
-
-	function edit(id){
-		// $(this).parents('.btn-group').hide();
-		$('#post_title_'+id).replaceWith('<input id=\"post_title_'+id+'\" type=\"text\" class=\"form-control\" value="'+$('#post_title_'+id).html()+'">');
-		$('#post_content_'+id).replaceWith('<textarea id=\"post_content_'+id+'\" class=\"form-control\">'+$('#post_content_'+id).html().replaceAll('<br>','\r\n')+'</textarea>');
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+		String.prototype.replaceAll = function(search, replacement) {
+			var target = this;
+			return target.replace(new RegExp(search, 'g'), replacement);
+		}
 		
-		$("#post_title_"+id).data('old', $("#post_title_"+id).val());
+		var Posts = {
+			edit	: function(e){
+				e.preventDefault();
+				var container = $(this).parents('.card.marginbottom10'),
+					title = $('<input/>', {type: 'text', class: 'form-control', value: container.find('h2').text()}),
+					content = $('<textarea/>', {class: 'form-control', rows: '8', value: container.find('.card-text span').text()})
+				container.find('h2').data('old', container.find('h2').text()).addClass('hidden').after(title)
+				container.find('.card-text span').addClass('hidden').after(content)
+				container.find('.input-group-btn.hidden').removeClass('hidden')
+			},
+			save	: function(e){
+				e.preventDefault();
+				var container = $(this).parents('.card.marginbottom10'),
+					title = container.find('input.form-control'),
+					content = container.find('textarea.form-control')
+				$.post('/api/update_post',{id: container.data('post'), title: title.val(), content: content.val() }, function(data){
+					console.log(data)
+				}, 'json');
+				title.remove()
+				content.remove()
+				container.find('.hidden').removeClass('hidden')
+				container.find('.input-group-btn').addClass('hidden')
+			},
+			cancel	: function(e){
+				e.preventDefault();
+				var container = $(this).parents('.card.marginbottom10'),
+					title = container.find('input.form-control'),
+					content = container.find('textarea.form-control')
+				title.remove()
+				content.remove()
+				container.find('.hidden').removeClass('hidden')
+				container.find('.input-group-btn').addClass('hidden')
+			}
+		}
 		
-
-		$('#btn-group_'+id).hide();
-		$('#input-btn-group_'+id).show();
-	}
-
-	function save(id){
-		var title = $('#post_title_'+id);
-		var content = $('#post_content_'+id);
-
-		$.post("/api/update_post",{id: id, title: title.val(), content: content.val() },function(data){
-			// alert('sended');
-		},"json");
-
-		title.replaceWith('<h2 id="post_title_'+id+'">'+title.val()+'</h2>');
-		content.replaceWith('<span id="post_content_'+id+'">'+content.val().replaceAll('\r\n','<br>')+'</span>');
-		$('#input-btn-group_'+id).hide();
-		$('#btn-group_'+id).show();
-	}
-
-	function cancel(id){
-		var title = $('#post_title_'+id);
-		var content = $('#post_content_'+id);
-		console.log(title);
-		title.replaceWith('<h2 id="post_title_'+id+'">'+title.data('old')+'</h2>');
-		content.replaceWith('<span id="post_content_'+id+'">'+content.html().replaceAll('\r\n','<br>')+'</span>');
-
-		$("#post_title_"+id).data('old', $("#post_title_"+id).val());
-
-		$('#input-btn-group_'+id).hide();
-		$('#btn-group_'+id).show();
-	}
-	</script>
-
+		$('.edit').on('click', Posts.edit)
+		$('.save').on('click', Posts.save)
+		$('.cancel').on('click', Posts.cancel)
+    </script>
 </body>
 </html>
