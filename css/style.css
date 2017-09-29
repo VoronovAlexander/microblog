@@ -36,3 +36,6 @@ body{
 .authform, .registerform{
 	max-width: 360px;
 }
+.hidden{
+	display: none
+}

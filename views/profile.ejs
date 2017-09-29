@@ -130,36 +130,39 @@
 		
 		var Posts = {
 			edit	: function(e){
-				e.preventDefault();
+				// e.preventDefault();
 				var container = $(this).parents('.card.marginbottom10'),
 					title = $('<input/>', {type: 'text', class: 'form-control', value: container.find('h2').text()}),
-					content = $('<textarea/>', {class: 'form-control', rows: '8', value: container.find('.card-text span').text()})
+					content = $('<textarea/>', {class: 'form-control', rows: '8', html: container.find('.card-text span').text()})
 				container.find('h2').data('old', container.find('h2').text()).addClass('hidden').after(title)
 				container.find('.card-text span').addClass('hidden').after(content)
 				container.find('.input-group-btn.hidden').removeClass('hidden')
+                container.find('.btn-group').addClass('hidden');
 			},
 			save	: function(e){
-				e.preventDefault();
+				// e.preventDefault();
 				var container = $(this).parents('.card.marginbottom10'),
 					title = container.find('input.form-control'),
 					content = container.find('textarea.form-control')
 				$.post('/api/update_post',{id: container.data('post'), title: title.val(), content: content.val() }, function(data){
 					console.log(data)
 				}, 'json');
+                container.find().value() // THIS!!!
+                container.find('.hidden').removeClass('hidden')
+                container.find('.input-group-btn').addClass('hidden')
 				title.remove()
 				content.remove()
-				container.find('.hidden').removeClass('hidden')
-				container.find('.input-group-btn').addClass('hidden')
 			},
 			cancel	: function(e){
-				e.preventDefault();
+				// e.preventDefault();
 				var container = $(this).parents('.card.marginbottom10'),
 					title = container.find('input.form-control'),
 					content = container.find('textarea.form-control')
-				title.remove()
+                container.find('.hidden').removeClass('hidden')
+                container.find('.input-group-btn').addClass('hidden')
+                title.remove()
 				content.remove()
-				container.find('.hidden').removeClass('hidden')
-				container.find('.input-group-btn').addClass('hidden')
+
 			}
 		}
 		
